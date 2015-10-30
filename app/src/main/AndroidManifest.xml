@@ -16,6 +16,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".Views.Login"
+            android:label="@string/title_activity_login"></activity>
+        <activity
+            android:name=".Views.Principal"
+            android:label="@string/title_activity_principal"></activity>
     </application>
 
 </manifest>
