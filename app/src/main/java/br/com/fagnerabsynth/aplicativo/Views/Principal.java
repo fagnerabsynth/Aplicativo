@@ -9,9 +9,11 @@ import android.view.MenuItem;
 import android.view.View;
 
 import br.com.fagnerabsynth.aplicativo.Inicial;
+import br.com.fagnerabsynth.aplicativo.Models.ProdutosMOD;
 import br.com.fagnerabsynth.aplicativo.R;
 
 public class Principal extends AppCompatActivity {
+    private ProdutosMOD dados = new ProdutosMOD();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +27,13 @@ public class Principal extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.principal, menu);
         return true;
     }
+
+    public void cadastraProduto(View btn) {
+        Intent intentado = new Intent(this, Edicao.class);
+        intentado.putExtra("id", dados.id);
+        startActivity(intentado);
+    }
+
 
 
     public void fecharSessao(View btn) {
