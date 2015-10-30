@@ -8,6 +8,9 @@ import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import br.com.fagnerabsynth.aplicativo.Views.Login;
 import br.com.fagnerabsynth.aplicativo.Views.Principal;
 
@@ -26,9 +29,16 @@ public class Inicial extends AppCompatActivity {
         setContentView(R.layout.inicial);
         SharedPreferences pref = getApplicationContext().getSharedPreferences("sessao", 0);
 
-        inicia();
+//faz uma graça de mostrar o activityindicator
+        new Timer().schedule(new TimerTask() {
+            @Override
+            public void run() {
+                inicia();
+            }
+        }, 3000);
 
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -54,6 +64,7 @@ public class Inicial extends AppCompatActivity {
 
     private void inicia() {
 
+
         //verifica se a sessao com o nome da pessoa esta ativa
         String valor;
         SharedPreferences pref = getApplicationContext().getSharedPreferences("sessao", 0);
@@ -73,6 +84,8 @@ public class Inicial extends AppCompatActivity {
 
         startActivity(intentado);
 
+        //impede do usuario retornar a pagina anterior
+        finish();
     }
 
 
