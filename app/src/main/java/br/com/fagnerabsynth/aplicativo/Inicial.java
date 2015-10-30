@@ -18,7 +18,7 @@ public class Inicial extends AppCompatActivity {
 
     //Coloca em um metodo statico o valor da sessao para consulta
     private static boolean sessao = false;
-
+    private String valor;
     public static boolean sessao() {
         return sessao;
     }
@@ -27,15 +27,26 @@ public class Inicial extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.inicial);
+
         SharedPreferences pref = getApplicationContext().getSharedPreferences("sessao", 0);
 
+        valor = pref.getString("sessao", null);
+
+        sessao = !TextUtils.isEmpty(valor);
+
+
+        if (!sessao) {
 //faz uma graça de mostrar o activityindicator
-        new Timer().schedule(new TimerTask() {
-            @Override
-            public void run() {
-                inicia();
-            }
-        }, 3000);
+            new Timer().schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    inicia();
+                }
+            }, 3000);
+
+        } else {
+            inicia();
+        }
 
     }
 
@@ -67,10 +78,6 @@ public class Inicial extends AppCompatActivity {
 
         //verifica se a sessao com o nome da pessoa esta ativa
         String valor;
-        SharedPreferences pref = getApplicationContext().getSharedPreferences("sessao", 0);
-        valor = pref.getString("sessao", null);
-
-        sessao = !TextUtils.isEmpty(valor);
 
 
         //verifica se a sessao esta ativa ou nao e direciona para a pagina correta!

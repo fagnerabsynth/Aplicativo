@@ -9,6 +9,7 @@
     tools:context="br.com.fagnerabsynth.aplicativo.Views.Login">
 
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
@@ -26,7 +27,6 @@
             android:inputType="textEmailAddress"
             android:textAlignment="center" />
 
-
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -40,9 +40,26 @@
             android:textAlignment="center" />
 
         <Button
+            android:id="@+id/btnLogar"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:onClick="logar"
             android:text="Logar" />
 
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="Login: admin@admin.com"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="Senha: 12345"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
     </LinearLayout>
+
+
 </RelativeLayout>
