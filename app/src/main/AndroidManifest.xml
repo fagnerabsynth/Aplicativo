@@ -24,10 +24,13 @@
             android:label="@string/title_activity_principal" />
         <activity
             android:name=".Views.Pesquisa"
-            android:label="@string/title_activity_pesquisa"></activity>
+            android:label="@string/title_activity_pesquisa" />
         <activity
             android:name=".Views.Edicao"
-            android:label="@string/title_activity_edicao"></activity>
+            android:label="@string/title_activity_edicao" />
+        <activity
+            android:name=".Views.PopUp"
+            android:label="@string/title_activity_pop_up"></activity>
     </application>
 
 </manifest>

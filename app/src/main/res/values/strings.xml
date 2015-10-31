@@ -7,4 +7,5 @@
     <string name="title_activity_principal">Aplicativo</string>
     <string name="title_activity_pesquisa">Pesquisa</string>
     <string name="title_activity_edicao">Edicao</string>
+    <string name="title_activity_pop_up">PopUp</string>
 </resources>
