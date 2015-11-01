@@ -11,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -19,10 +20,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.fagnerabsynth.aplicativo.Data.Conexao;
+import br.com.fagnerabsynth.aplicativo.Models.ProdutosMOD;
 import br.com.fagnerabsynth.aplicativo.R;
 
 public class Edicao extends AppCompatActivity {
-
+    private int id;
     private Spinner spinner;
     private String valorSpinner, add = "Adicionar nova categoria";
     private LinearLayout linear, popup;
@@ -73,6 +75,7 @@ public class Edicao extends AppCompatActivity {
 
     }
 
+
     private void criaSpinner() {
         spinner.setPrompt("Seleciona uma categoria");
 
@@ -94,6 +97,92 @@ public class Edicao extends AppCompatActivity {
                 android.R.layout.simple_list_item_1, list);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(dataAdapter);
+
+    }
+
+    public void cadastraProduto(View v) {
+        EditText Lblproduto = (EditText) findViewById(R.id.produto);
+        String produto = Lblproduto.getText().toString();
+
+        EditText LblDesc = (EditText) findViewById(R.id.descricao);
+        String descricao = LblDesc.getText().toString();
+
+        EditText Lblpreco = (EditText) findViewById(R.id.preco);
+        String preco = Lblpreco.getText().toString();
+
+        boolean radio = false;
+        RadioButton sim = (RadioButton) findViewById(R.id.sim);
+        RadioButton nao = (RadioButton) findViewById(R.id.nao);
+
+        if (sim.isChecked() || nao.isChecked()) {
+            radio = true;
+        }
+
+
+        String erro = "";
+
+        if (TextUtils.isEmpty(valorSpinner) || valorSpinner.equals(add)) {
+            erro = "Selecione uma categoria válida";
+        }
+
+
+        int ativo = 0;
+
+        if (!radio) {
+            if (!erro.equals("")) {
+                erro += "\n";
+            }
+            erro += "Selecione uma opção no menu de ativação";
+        } else {
+            if (sim.isChecked()) {
+                ativo = 1;
+            }
+        }
+
+
+        if (TextUtils.isEmpty(produto)) {
+            if (!erro.equals("")) {
+                erro += "\n";
+            }
+            erro += "O Produto não pode ficar em branco";
+        }
+
+
+        if (TextUtils.isEmpty(descricao)) {
+            if (!erro.equals("")) {
+                erro += "\n";
+            }
+            erro += "A Descrição não pode ficar em branco";
+        }
+
+
+        if (TextUtils.isEmpty(preco)) {
+            if (!erro.equals("")) {
+                erro += "\n";
+            }
+            erro += "O Preço não pode ficar em branco";
+        }
+
+
+        if (!erro.equals("")) {
+            Toast.makeText(this, erro, Toast.LENGTH_SHORT).show();
+        } else {
+            ProdutosMOD pro = new ProdutosMOD();
+            pro.id = id;
+            pro.ativo = ativo;
+            pro.categoria = valorSpinner;
+            pro.descricao = descricao;
+            pro.nome = produto;
+            pro.valor = preco;
+            Conexao con = new Conexao(this);
+
+            if (con.adicionaProduto(pro)) {
+                Toast.makeText(this, "ok", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "erro", Toast.LENGTH_SHORT).show();
+            }
+        }
+
 
     }
 
@@ -140,7 +229,7 @@ public class Edicao extends AppCompatActivity {
         });
 
         criaSpinner();
-        int id = getIntent().getIntExtra("id", 0);
+        id = getIntent().getIntExtra("id", 0);
 
         if (id == 0) {
             setTitle("Adicionar produtos");

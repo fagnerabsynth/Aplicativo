@@ -29,7 +29,7 @@ public class Conexao extends SQLiteOpenHelper {
             + TABELA + "( id integer primary key autoincrement, email text not null, senha text not null);";
 
     private static final String CRIARTABELA2 = "create table "
-            + TABELA2 + "( id integer primary key autoincrement, nome text not null, categoria text not null,descricao text not null, ativo flag INTEGER DEFAULT 0, valor DECIMAL(10,2) not null );";
+            + TABELA2 + "( id integer primary key autoincrement, nome text not null, categoria text not null,descricao text not null, ativo flag INTEGER DEFAULT 0, valor text not null );";
 
     private static final String CRIARTABELA3 = "create table "
             + TABELA3 + "( id integer primary key autoincrement, categoria text not null unique);";
@@ -92,6 +92,8 @@ public class Conexao extends SQLiteOpenHelper {
 
 
     public boolean adicionaProduto(ProdutosMOD produto) {
+        db = this.getWritableDatabase();
+
         try {
             if (produto.id != 0) {
                 db.execSQL("Insert into " + TABELA2 + "(nome,categoria,descricao,ativo,valor) values (?,?,?,?,?)", new String[]{produto.nome, produto.categoria, produto.descricao, "" + produto.ativo, "" + produto.valor});
@@ -103,6 +105,7 @@ public class Conexao extends SQLiteOpenHelper {
         }
         return true;
     }
+
 
     public boolean adicionaCategoria(String cat) {
         db = this.getWritableDatabase();

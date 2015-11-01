@@ -9,5 +9,5 @@ public class ProdutosMOD {
     public String categoria;
     public String descricao;
     public int ativo;
-    public double valor;
+    public String valor;
 }
