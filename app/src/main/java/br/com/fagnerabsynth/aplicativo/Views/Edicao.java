@@ -200,8 +200,7 @@ public class Edicao extends AppCompatActivity {
             }
 
         }
-
-
+        
     }
 
     public void executaSpinner() {
