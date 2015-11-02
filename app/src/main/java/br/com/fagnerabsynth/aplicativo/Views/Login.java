@@ -27,7 +27,7 @@ public class Login extends AppCompatActivity {
         txtPass = (EditText) findViewById(R.id.txtPass);
 
 
-        String SUBTITULO = "For favor, faça seu login!";
+        String SUBTITULO = "Por favor, faça seu login!";
         String TITULO = new App().getNome();
         getSupportActionBar().setTitle(TITULO);
         getSupportActionBar().setSubtitle(SUBTITULO);
