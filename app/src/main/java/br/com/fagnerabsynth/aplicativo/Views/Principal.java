@@ -20,6 +20,9 @@ public class Principal extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.principal);
         setTitle(new App().getNome());
+        getSupportActionBar().setIcon(R.mipmap.logo);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
     }
 
 

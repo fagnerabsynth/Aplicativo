@@ -31,7 +31,9 @@ public class Login extends AppCompatActivity {
         String TITULO = new App().getNome();
         getSupportActionBar().setTitle(TITULO);
         getSupportActionBar().setSubtitle(SUBTITULO);
-
+        getSupportActionBar().setIcon(R.mipmap.logo);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
     }
 
@@ -80,7 +82,7 @@ public class Login extends AppCompatActivity {
             SharedPreferences.Editor editor = pref.edit();
             editor.putString("sessao", mail);
             editor.commit();
-            Toast.makeText(Login.this, "Seja bem vindo ao aplicativo! " + mail, Toast.LENGTH_LONG).show();
+            Toast.makeText(Login.this, "Seja bem vindo ao aplicativo \"" + new App().getNome() + "\"!\n" + mail, Toast.LENGTH_LONG).show();
 
             Intent intentado = new Intent(this, Inicial.class);
             startActivity(intentado);
@@ -93,6 +95,9 @@ public class Login extends AppCompatActivity {
     }
 
 
+    public void fechar(View b) {
+        finish();
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

@@ -1,5 +1,7 @@
 package br.com.fagnerabsynth.aplicativo.Views;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -29,20 +31,24 @@ public class Edicao extends AppCompatActivity {
     private String valorSpinner, add = "Adicionar nova categoria";
     private LinearLayout linear, popup;
     private RelativeLayout main;
+    private ProdutosMOD pro = new ProdutosMOD();
+    private EditText Lblproduto, LblDesc, Lblpreco;
+    private RadioButton sim, nao;
 
     public void cancelar(View v) {
         linear.setVisibility(View.VISIBLE);
         popup.setVisibility(View.INVISIBLE);
         Toast.makeText(Edicao.this, "Cadastro de nova categoria\ncancelado pelo usuário", Toast.LENGTH_SHORT).show();
         main.setBackgroundColor(Color.TRANSPARENT);
-
         criaSpinner();
-
     }
 
+    public void listarProduto(View btn) {
+        Intent intentado = new Intent(this, Listar.class);
+        startActivity(intentado);
+    }
 
     public void cadastraCategoria(View b) {
-
         EditText input = (EditText) findViewById(R.id.novaCategoria);
         String novaCategoria = input.getText().toString();
         String mensagem = "";
@@ -98,18 +104,12 @@ public class Edicao extends AppCompatActivity {
     }
 
     public void cadastraProduto(View v) {
-        EditText Lblproduto = (EditText) findViewById(R.id.produto);
         String produto = Lblproduto.getText().toString();
-
-        EditText LblDesc = (EditText) findViewById(R.id.descricao);
         String descricao = LblDesc.getText().toString();
-
-        EditText Lblpreco = (EditText) findViewById(R.id.preco);
         String preco = Lblpreco.getText().toString();
 
         boolean radio = false;
-        RadioButton sim = (RadioButton) findViewById(R.id.sim);
-        RadioButton nao = (RadioButton) findViewById(R.id.nao);
+
 
         if (sim.isChecked() || nao.isChecked()) {
             radio = true;
@@ -162,19 +162,43 @@ public class Edicao extends AppCompatActivity {
         if (!erro.equals("")) {
             Toast.makeText(this, erro, Toast.LENGTH_SHORT).show();
         } else {
-            ProdutosMOD pro = new ProdutosMOD();
-            pro.id = 0;
-            pro.ativo = ativo;
-            pro.categoria = valorSpinner.toString();
-            pro.descricao = descricao;
-            pro.nome = produto;
-            pro.valor = preco;
+            if (pro.id == 0) {
+                pro = new ProdutosMOD();
+                pro.id = 0;
+                pro.ativo = ativo;
+                pro.categoria = valorSpinner.toString();
+                pro.descricao = descricao;
+                pro.nome = produto;
+                pro.valor = preco;
 
-            if (con.adicionaProduto(pro)) {
-                Toast.makeText(this, "ok", Toast.LENGTH_SHORT).show();
+                if (con.adicionaProduto(pro)) {
+                    sim.setChecked(false);
+                    nao.setChecked(false);
+                    LblDesc.setText("");
+                    Lblpreco.setText("");
+                    Lblproduto.setText("");
+                    spinner.setSelection(0);
+
+                    Toast.makeText(this, "Produto adicionado com sucesso!", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(this, "Não foi possivel cadastrar o produto!\n" +
+                            "Produto com o mesmo nome existente!", Toast.LENGTH_LONG).show();
+                }
             } else {
-                Toast.makeText(this, "erro", Toast.LENGTH_SHORT).show();
+                pro.ativo = ativo;
+                pro.categoria = valorSpinner.toString();
+                pro.descricao = descricao;
+                pro.nome = produto;
+                pro.valor = preco;
+                if (con.adicionaProduto(pro)) {
+                    setResult(Activity.RESULT_OK, new Intent());
+                    Toast.makeText(this, "Produto: \"" + pro.nome + "\" atualizado com sucesso!", Toast.LENGTH_LONG).show();
+                    super.onBackPressed();
+                } else {
+                    Toast.makeText(this, "Não foi possivel atualizar o produto!\nProduto com o mesmo nome existente!", Toast.LENGTH_LONG).show();
+                }
             }
+
         }
 
 
@@ -200,6 +224,7 @@ public class Edicao extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        pro.id = 0;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.edicao);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -209,12 +234,14 @@ public class Edicao extends AppCompatActivity {
         //limpa categoria nao utilizada
         con.limpa();
 
-
+        sim = (RadioButton) findViewById(R.id.sim);
+        nao = (RadioButton) findViewById(R.id.nao);
+        Lblproduto = (EditText) findViewById(R.id.produto);
+        LblDesc = (EditText) findViewById(R.id.descricao);
+        Lblpreco = (EditText) findViewById(R.id.preco);
         linear = (LinearLayout) findViewById(R.id.itens);
         popup = (LinearLayout) findViewById(R.id.popup);
-
         main = (RelativeLayout) findViewById(R.id.main);
-
         spinner = (Spinner) findViewById(R.id.spinner);
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -234,17 +261,43 @@ public class Edicao extends AppCompatActivity {
 
         String SUBTITULO;
         if (TextUtils.isEmpty(nome)) {
-            SUBTITULO = "Adicionar produtos";
+
+            View v = this.findViewById(R.id.cadastra);
+            v.setVisibility(View.VISIBLE);
+
+            View v2 = this.findViewById(R.id.altera);
+            v2.setVisibility(View.INVISIBLE);
+
+            SUBTITULO = "Adicionar produto";
         } else {
-            SUBTITULO = "Alterar produto";
+            pro = con.pesquisaProduto(nome, 0);
+            Lblproduto.setText(pro.nome);
+            LblDesc.setText(pro.descricao);
+            Lblpreco.setText(pro.valor);
+            spinner.setSelection(((ArrayAdapter<String>) spinner.getAdapter()).getPosition(pro.categoria));
+            if (pro.ativo == 1) {
+                sim.setChecked(true);
+            } else {
+                nao.setChecked(true);
+            }
+
+            View v = this.findViewById(R.id.cadastra);
+            v.setVisibility(View.INVISIBLE);
+
+            View v2 = this.findViewById(R.id.altera);
+            v2.setVisibility(View.VISIBLE);
+
+            SUBTITULO = "Alterar: " + pro.nome;
         }
+
         String TITULO = new App().getNome();
         getSupportActionBar().setTitle(TITULO);
         getSupportActionBar().setSubtitle(SUBTITULO);
-
+        getSupportActionBar().setIcon(R.mipmap.logo);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
     }
-
 
 
     @Override

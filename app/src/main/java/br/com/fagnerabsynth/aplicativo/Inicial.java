@@ -1,20 +1,19 @@
 package br.com.fagnerabsynth.aplicativo;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.MenuItem;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
-import br.com.fagnerabsynth.aplicativo.Models.App;
 import br.com.fagnerabsynth.aplicativo.Views.Login;
 import br.com.fagnerabsynth.aplicativo.Views.Principal;
 
-public class Inicial extends AppCompatActivity {
+public class Inicial extends Activity {
 
     //Coloca em um metodo statico o valor da sessao para consulta
     private static boolean sessao = false;
@@ -27,7 +26,6 @@ public class Inicial extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.inicial);
-        setTitle(new App().getNome());
 
         SharedPreferences pref = getApplicationContext().getSharedPreferences("sessao", 0);
         valor = pref.getString("sessao", null);

@@ -9,7 +9,7 @@ public class App {
     }
 
     public String getNome() {
-        return "Nome do Aplicativo";
+        return "Loja 2";
     }
 
 

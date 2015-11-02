@@ -58,6 +58,9 @@ public class MostrarProduto extends AppCompatActivity {
         String TITULO = new App().getNome();
         getSupportActionBar().setTitle(TITULO);
         getSupportActionBar().setSubtitle(SUBTITULO);
+        getSupportActionBar().setIcon(R.mipmap.logo);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
     }
 

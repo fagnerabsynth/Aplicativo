@@ -3,6 +3,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FFFFFFFF"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
@@ -122,6 +123,7 @@
         </TableLayout>
 
         <LinearLayout
+            android:id="@+id/cadastra"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
@@ -136,10 +138,17 @@
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:onClick="listarProduto"
                 android:text="Listar" />
 
         </LinearLayout>
 
+        <Button
+            android:id="@+id/altera"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:onClick="cadastraProduto"
+            android:text="Alterar" />
     </LinearLayout>
 
     <LinearLayout

@@ -44,6 +44,9 @@ public class Listar extends AppCompatActivity {
         String SUBTITULO = "pesquisar";
         getSupportActionBar().setTitle(TITULO);
         getSupportActionBar().setSubtitle(SUBTITULO);
+        getSupportActionBar().setIcon(R.mipmap.logo);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         et = (EditText) findViewById(R.id.procurar);
 
@@ -89,19 +92,18 @@ public class Listar extends AppCompatActivity {
 
         switch (item.getItemId()) {
 
-            case CONTEXTMENU_OPTION1:
+            case CONTEXTMENU_OPTION2:
                 if (con.apagaProduto(nome)) {
                     Toast.makeText(this, "O produto selecionado: \"" + nome + "\"\nfoi removido com sucesso!", Toast.LENGTH_LONG).show();
                     iniciar();
-
                 } else {
                     Toast.makeText(this, "Não foi possivel apagar produto selecionado: \"" + nome + "\"\n\nPor favor, tente novamente!", Toast.LENGTH_LONG).show();
                 }
                 break;
-            case CONTEXTMENU_OPTION2:
+            case CONTEXTMENU_OPTION1:
                 Intent intentado = new Intent(this, Edicao.class);
                 intentado.putExtra("nome", nome);
-                startActivity(intentado);
+                startActivityForResult(intentado, 1);
                 break;
 
         }

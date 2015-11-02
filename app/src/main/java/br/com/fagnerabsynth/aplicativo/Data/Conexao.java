@@ -169,7 +169,7 @@ public class Conexao extends SQLiteOpenHelper {
             if (produto.id == 0) {
                 db.execSQL("Insert into " + TABELA2 + "(nome,categoria,descricao,ativo,valor) values (?,?,?,?,?)", new String[]{produto.nome, produto.categoria, produto.descricao, "" + produto.ativo, "" + produto.valor});
             } else {
-                db.execSQL("update " + TABELA2 + " set nome=?,categoria=?,descricao=?,ativo=?,valor=? where id = ?", new String[]{produto.nome, produto.categoria, produto.descricao, "" + produto.ativo, "" + produto.valor, "" + produto.id});
+                db.execSQL("update " + TABELA2 + " set nome=?,categoria=?,descricao=?,ativo=?,valor=? where id = ?", new String[]{produto.nome, produto.categoria, produto.descricao, "" + produto.ativo, produto.valor, "" + produto.id});
             }
         } catch (Exception e) {
             return false;
