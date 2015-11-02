@@ -46,7 +46,7 @@ public class Conexao extends SQLiteOpenHelper {
         super(context, ARQUIVO, null, VERSAO);
     }
 
-    public ProdutosMOD pesquisaProduto(String nome) {
+    public ProdutosMOD pesquisaProduto(String nome, int b) {
         db = this.getWritableDatabase();
         Cursor tb = db.rawQuery("select * from " + TABELA2 + " where ativo = '1' and nome = ? order by nome asc ", new String[]{nome});
         ProdutosMOD objeto = new ProdutosMOD();
@@ -63,6 +63,13 @@ public class Conexao extends SQLiteOpenHelper {
         return objeto;
     }
 
+    public List<ProdutosMOD> pesquisaProduto(String pesquisa) {
+        this.pesquisa = pesquisa;
+        List<ProdutosMOD> dados = pesquisaProduto();
+        this.pesquisa = "";
+        return dados;
+    }
+
     public List<ProdutosMOD> pesquisaProduto() {
         db = this.getWritableDatabase();
         List<ProdutosMOD> lista = new ArrayList<ProdutosMOD>();
@@ -71,7 +78,7 @@ public class Conexao extends SQLiteOpenHelper {
         if (TextUtils.isEmpty(pesquisa))
             tb = db.rawQuery("select * from " + TABELA2 + " where ativo = '1' order by nome asc ", null);
         else
-            tb = db.rawQuery("select * from " + TABELA2 + " where nome like '%?%' and  ativo = '1' order by nome asc ", new String[]{pesquisa});
+            tb = db.rawQuery("select * from " + TABELA2 + " where nome like ? and  ativo = '1' order by nome asc ", new String[]{"%" + pesquisa + "%"});
 
 
         ProdutosMOD objeto;
@@ -140,8 +147,6 @@ public class Conexao extends SQLiteOpenHelper {
             String[] dadosAdmin = {"admin@admin.com", md5("12345")};
             db.execSQL("Insert into " + TABELA + "(email,senha) values (?,?)", dadosAdmin);
         }
-
-
     }
 
 

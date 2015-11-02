@@ -3,6 +3,9 @@ package br.com.fagnerabsynth.aplicativo.Views;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,9 +29,11 @@ public class Listar extends AppCompatActivity {
     protected static final int CONTEXTMENU_OPTION2 = 2;
     protected static final int CONTEXTMENU_OPTION3 = 2;
     private ListView listView;
-    private EditText pesquisar;
+    private EditText pesquisar, et;
     private List<ProdutosMOD> lista;
     private Conexao con;
+    private String tx;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +44,23 @@ public class Listar extends AppCompatActivity {
         String SUBTITULO = "pesquisar";
         getSupportActionBar().setTitle(TITULO);
         getSupportActionBar().setSubtitle(SUBTITULO);
+
+        et = (EditText) findViewById(R.id.procurar);
+
+        et.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                iniciar();
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
 
 
         iniciar();
@@ -69,7 +91,7 @@ public class Listar extends AppCompatActivity {
 
             case CONTEXTMENU_OPTION1:
                 if (con.apagaProduto(nome)) {
-                    Toast.makeText(this, "O produto selecionado: \"" + nome + "\" foi removido da lista!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "O produto selecionado: \"" + nome + "\"\nfoi removido com sucesso!", Toast.LENGTH_LONG).show();
                     iniciar();
 
                 } else {
@@ -77,13 +99,9 @@ public class Listar extends AppCompatActivity {
                 }
                 break;
             case CONTEXTMENU_OPTION2:
-                if (con.apagaProduto(nome)) {
-                    Toast.makeText(this, "O produto selecionado: \"" + nome + "\" foi removido da lista!", Toast.LENGTH_LONG).show();
-                    iniciar();
-
-                } else {
-                    Toast.makeText(this, "Não foi possivel apagar produto selecionado: \"" + nome + "\"\n\nPor favor, tente novamente!", Toast.LENGTH_LONG).show();
-                }
+                Intent intentado = new Intent(this, Edicao.class);
+                intentado.putExtra("nome", nome);
+                startActivity(intentado);
                 break;
 
         }
@@ -92,12 +110,17 @@ public class Listar extends AppCompatActivity {
     }
 
 
-    private void iniciar() {
+    public void iniciar() {
+
+        tx = et.getText().toString();
 
         con = new Conexao(this);
 
-        lista = con.pesquisaProduto();
-
+        if (TextUtils.isEmpty(tx)) {
+            lista = con.pesquisaProduto();
+        } else {
+            lista = con.pesquisaProduto(tx);
+        }
 
         ProdutosAdapter adapter = new ProdutosAdapter(this, lista);
         listView = (ListView) findViewById(R.id.listview);
@@ -118,10 +141,20 @@ public class Listar extends AppCompatActivity {
         registerForContextMenu(listView);
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
+                iniciar();
+            }
+        }
+    }
+
     private void mudaPagina(String nome) {
         Intent in = new Intent(this, MostrarProduto.class);
         in.putExtra("nome", nome);
-        startActivity(in);
+        startActivityForResult(in, 1);
     }
 
 

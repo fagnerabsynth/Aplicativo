@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
@@ -13,6 +12,7 @@ import android.widget.Toast;
 
 import br.com.fagnerabsynth.aplicativo.Data.Conexao;
 import br.com.fagnerabsynth.aplicativo.Inicial;
+import br.com.fagnerabsynth.aplicativo.Models.App;
 import br.com.fagnerabsynth.aplicativo.R;
 
 public class Login extends AppCompatActivity {
@@ -25,6 +25,13 @@ public class Login extends AppCompatActivity {
         setContentView(R.layout.login);
         txtMail = (EditText) findViewById(R.id.txtMail);
         txtPass = (EditText) findViewById(R.id.txtPass);
+
+
+        String SUBTITULO = "For favor, faça seu login!";
+        String TITULO = new App().getNome();
+        getSupportActionBar().setTitle(TITULO);
+        getSupportActionBar().setSubtitle(SUBTITULO);
+
 
     }
 
@@ -86,12 +93,6 @@ public class Login extends AppCompatActivity {
     }
 
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.login, menu);
-        return true;
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

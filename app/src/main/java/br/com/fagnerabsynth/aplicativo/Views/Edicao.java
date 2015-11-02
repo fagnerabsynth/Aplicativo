@@ -25,7 +25,6 @@ import br.com.fagnerabsynth.aplicativo.R;
 
 public class Edicao extends AppCompatActivity {
     private Conexao con;
-    private int id;
     private Spinner spinner;
     private String valorSpinner, add = "Adicionar nova categoria";
     private LinearLayout linear, popup;
@@ -164,7 +163,7 @@ public class Edicao extends AppCompatActivity {
             Toast.makeText(this, erro, Toast.LENGTH_SHORT).show();
         } else {
             ProdutosMOD pro = new ProdutosMOD();
-            pro.id = id;
+            pro.id = 0;
             pro.ativo = ativo;
             pro.categoria = valorSpinner.toString();
             pro.descricao = descricao;
@@ -210,6 +209,7 @@ public class Edicao extends AppCompatActivity {
         //limpa categoria nao utilizada
         con.limpa();
 
+
         linear = (LinearLayout) findViewById(R.id.itens);
         popup = (LinearLayout) findViewById(R.id.popup);
 
@@ -228,11 +228,12 @@ public class Edicao extends AppCompatActivity {
         });
 
         criaSpinner();
-        id = getIntent().getIntExtra("id", 0);
+
+        String nome = getIntent().getStringExtra("nome");
 
 
         String SUBTITULO;
-        if (id == 0) {
+        if (TextUtils.isEmpty(nome)) {
             SUBTITULO = "Adicionar produtos";
         } else {
             SUBTITULO = "Alterar produto";

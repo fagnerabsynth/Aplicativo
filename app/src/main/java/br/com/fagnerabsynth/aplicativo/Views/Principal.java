@@ -4,11 +4,11 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
 import br.com.fagnerabsynth.aplicativo.Inicial;
+import br.com.fagnerabsynth.aplicativo.Models.App;
 import br.com.fagnerabsynth.aplicativo.Models.ProdutosMOD;
 import br.com.fagnerabsynth.aplicativo.R;
 
@@ -19,25 +19,19 @@ public class Principal extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.principal);
+        setTitle(new App().getNome());
     }
 
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.principal, menu);
-        return true;
-    }
 
     public void cadastraProduto(View btn) {
         Intent intentado = new Intent(this, Edicao.class);
-        intentado.putExtra("id", dados.id);
+        intentado.putExtra("nome", "");
         startActivity(intentado);
     }
 
     public void listarProduto(View btn) {
         Intent intentado = new Intent(this, Listar.class);
-        intentado.putExtra("id", dados.id);
         startActivity(intentado);
     }
 

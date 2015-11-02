@@ -5,12 +5,12 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.view.Menu;
 import android.view.MenuItem;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
+import br.com.fagnerabsynth.aplicativo.Models.App;
 import br.com.fagnerabsynth.aplicativo.Views.Login;
 import br.com.fagnerabsynth.aplicativo.Views.Principal;
 
@@ -27,9 +27,9 @@ public class Inicial extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.inicial);
+        setTitle(new App().getNome());
 
         SharedPreferences pref = getApplicationContext().getSharedPreferences("sessao", 0);
-
         valor = pref.getString("sessao", null);
 
         sessao = !TextUtils.isEmpty(valor);
@@ -51,12 +51,6 @@ public class Inicial extends AppCompatActivity {
     }
 
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.inicial, menu);
-        return true;
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

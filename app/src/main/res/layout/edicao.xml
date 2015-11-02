@@ -163,7 +163,7 @@
             android:focusableInTouchMode="false"
             android:padding="10dp"
             android:text="Digite o nome da categoria"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="#000000" />
 
 
