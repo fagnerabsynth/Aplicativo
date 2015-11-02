@@ -39,7 +39,7 @@ public class Edicao extends AppCompatActivity {
         linear.setVisibility(View.VISIBLE);
         popup.setVisibility(View.INVISIBLE);
         Toast.makeText(Edicao.this, "Cadastro de nova categoria\ncancelado pelo usuário", Toast.LENGTH_SHORT).show();
-        main.setBackgroundColor(Color.TRANSPARENT);
+        main.setBackgroundColor(Color.WHITE);
         criaSpinner();
     }
 
@@ -63,7 +63,7 @@ public class Edicao extends AppCompatActivity {
                     mensagem = "Categoria adicionada com sucesso!";
                     linear.setVisibility(View.VISIBLE);
                     popup.setVisibility(View.INVISIBLE);
-                    main.setBackgroundColor(Color.TRANSPARENT);
+                    main.setBackgroundColor(Color.WHITE);
                     criaSpinner();
                     input.setText("");
                 } else {
