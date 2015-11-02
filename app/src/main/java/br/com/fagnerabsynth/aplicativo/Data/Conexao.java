@@ -4,10 +4,12 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.text.TextUtils;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.List;
 
 import br.com.fagnerabsynth.aplicativo.Models.ProdutosMOD;
 
@@ -29,7 +31,7 @@ public class Conexao extends SQLiteOpenHelper {
             + TABELA + "( id integer primary key autoincrement, email text not null, senha text not null);";
 
     private static final String CRIARTABELA2 = "create table "
-            + TABELA2 + "( id integer primary key autoincrement, nome text not null, categoria text not null,descricao text not null, ativo flag INTEGER DEFAULT 0, valor text not null );";
+            + TABELA2 + "( id integer primary key autoincrement, nome text not null unique, categoria text not null,descricao text not null, ativo flag INTEGER DEFAULT 0, valor text not null );";
 
     private static final String CRIARTABELA3 = "create table "
             + TABELA3 + "( id integer primary key autoincrement, categoria text not null unique);";
@@ -37,8 +39,75 @@ public class Conexao extends SQLiteOpenHelper {
 
     private SQLiteDatabase db;
 
+    private String pesquisa = "";
+
+
     public Conexao(Context context) {
         super(context, ARQUIVO, null, VERSAO);
+    }
+
+    public ProdutosMOD pesquisaProduto(String nome) {
+        db = this.getWritableDatabase();
+        Cursor tb = db.rawQuery("select * from " + TABELA2 + " where ativo = '1' and nome = ? order by nome asc ", new String[]{nome});
+        ProdutosMOD objeto = new ProdutosMOD();
+        if (tb.getCount() > 0) {
+            if (tb.moveToFirst()) {
+                objeto.nome = tb.getString(tb.getColumnIndex("nome"));
+                objeto.categoria = tb.getString(tb.getColumnIndex("categoria"));
+                objeto.valor = tb.getString(tb.getColumnIndex("valor"));
+                objeto.id = Integer.parseInt(tb.getString(tb.getColumnIndex("id")));
+                objeto.descricao = tb.getString(tb.getColumnIndex("descricao"));
+                objeto.ativo = Integer.parseInt(tb.getString(tb.getColumnIndex("ativo")));
+            }
+        }
+        return objeto;
+    }
+
+    public List<ProdutosMOD> pesquisaProduto() {
+        db = this.getWritableDatabase();
+        List<ProdutosMOD> lista = new ArrayList<ProdutosMOD>();
+        String query = "";
+        Cursor tb;
+        if (TextUtils.isEmpty(pesquisa))
+            tb = db.rawQuery("select * from " + TABELA2 + " where ativo = '1' order by nome asc ", null);
+        else
+            tb = db.rawQuery("select * from " + TABELA2 + " where nome like '%?%' and  ativo = '1' order by nome asc ", new String[]{pesquisa});
+
+
+        ProdutosMOD objeto;
+        if (tb.getCount() > 0) {
+            if (tb.moveToFirst()) {
+                do {
+                    objeto = new ProdutosMOD();
+                    objeto.nome = tb.getString(tb.getColumnIndex("nome"));
+                    objeto.categoria = tb.getString(tb.getColumnIndex("categoria"));
+                    objeto.valor = tb.getString(tb.getColumnIndex("valor"));
+                    objeto.id = Integer.parseInt(tb.getString(tb.getColumnIndex("id")));
+                    objeto.descricao = tb.getString(tb.getColumnIndex("descricao"));
+                    objeto.ativo = Integer.parseInt(tb.getString(tb.getColumnIndex("ativo")));
+                    lista.add(objeto);
+                } while (tb.moveToNext());
+            }
+        } else {
+            lista = new ArrayList<ProdutosMOD>();
+        }
+        return lista;
+    }
+
+    public void limpa() {
+        db = this.getWritableDatabase();
+        String resultado;
+        Cursor tb2 = db.rawQuery("SELECT * FROM " + TABELA3 + " ", null);
+        if (tb2.getCount() > 0) {
+            if (tb2.moveToFirst()) {
+                do {
+                    resultado = tb2.getString(tb2.getColumnIndex("categoria"));
+                    if (db.rawQuery("SELECT * FROM " + TABELA2 + " where categoria = ? ", new String[]{resultado}).getCount() == 0) {
+                        db.execSQL("DELETE FROM " + TABELA3 + " where categoria = ?", new String[]{resultado});
+                    }
+                } while (tb2.moveToNext());
+            }
+        }
     }
 
     private String md5(String s) {
@@ -72,30 +141,27 @@ public class Conexao extends SQLiteOpenHelper {
             db.execSQL("Insert into " + TABELA + "(email,senha) values (?,?)", dadosAdmin);
         }
 
-        String temp = "";
-        Cursor tb2 = db.rawQuery("SELECT * FROM " + TABELA2, null);
-        if (tb2.getCount() > 0) {
-
-            if (tb2.moveToFirst()) {
-                do {
-                    temp = tb2.getString(tb2.getColumnIndex("categoria"));
-                    Cursor tb3 = db.rawQuery("SELECT * FROM " + TABELA3 + " where categoria = ?", new String[]{temp});
-                    if (tb3.getCount() == 0) {
-                        db.execSQL("DELETE  FROM " + TABELA3 + " where categoria = ?", new String[]{temp});
-                    }
-                } while (tb2.moveToNext());
-            }
-        }
-
 
     }
+
+
+    public boolean apagaProduto(String nome) {
+        db = this.getWritableDatabase();
+        try {
+            db.execSQL("DELETE FROM " + TABELA2 + " where nome = ?", new String[]{nome});
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
+    }
+
 
 
     public boolean adicionaProduto(ProdutosMOD produto) {
         db = this.getWritableDatabase();
 
         try {
-            if (produto.id != 0) {
+            if (produto.id == 0) {
                 db.execSQL("Insert into " + TABELA2 + "(nome,categoria,descricao,ativo,valor) values (?,?,?,?,?)", new String[]{produto.nome, produto.categoria, produto.descricao, "" + produto.ativo, "" + produto.valor});
             } else {
                 db.execSQL("update " + TABELA2 + " set nome=?,categoria=?,descricao=?,ativo=?,valor=? where id = ?", new String[]{produto.nome, produto.categoria, produto.descricao, "" + produto.ativo, "" + produto.valor, "" + produto.id});

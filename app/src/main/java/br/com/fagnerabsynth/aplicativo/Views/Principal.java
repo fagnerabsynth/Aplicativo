@@ -35,7 +35,11 @@ public class Principal extends AppCompatActivity {
         startActivity(intentado);
     }
 
-
+    public void listarProduto(View btn) {
+        Intent intentado = new Intent(this, Listar.class);
+        intentado.putExtra("id", dados.id);
+        startActivity(intentado);
+    }
 
     public void fecharSessao(View btn) {
 

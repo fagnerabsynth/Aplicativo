@@ -8,4 +8,6 @@
     <string name="title_activity_pesquisa">Pesquisa</string>
     <string name="title_activity_edicao">Edicao</string>
     <string name="title_activity_pop_up">PopUp</string>
+    <string name="title_activity_listar">Listar</string>
+    <string name="title_activity_mostrar_produto">MostrarProduto</string>
 </resources>

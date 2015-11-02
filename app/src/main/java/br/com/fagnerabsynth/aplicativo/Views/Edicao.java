@@ -4,7 +4,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -20,10 +19,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.fagnerabsynth.aplicativo.Data.Conexao;
+import br.com.fagnerabsynth.aplicativo.Models.App;
 import br.com.fagnerabsynth.aplicativo.Models.ProdutosMOD;
 import br.com.fagnerabsynth.aplicativo.R;
 
 public class Edicao extends AppCompatActivity {
+    private Conexao con;
     private int id;
     private Spinner spinner;
     private String valorSpinner, add = "Adicionar nova categoria";
@@ -53,9 +54,6 @@ public class Edicao extends AppCompatActivity {
         } else {
 
             try {
-
-                Conexao con = new Conexao(this);
-
                 if (con.adicionaCategoria(novaCategoria)) {
                     mensagem = "Categoria adicionada com sucesso!";
                     linear.setVisibility(View.VISIBLE);
@@ -118,9 +116,7 @@ public class Edicao extends AppCompatActivity {
             radio = true;
         }
 
-
         String erro = "";
-
         if (TextUtils.isEmpty(valorSpinner) || valorSpinner.equals(add)) {
             erro = "Selecione uma categoria válida";
         }
@@ -170,11 +166,10 @@ public class Edicao extends AppCompatActivity {
             ProdutosMOD pro = new ProdutosMOD();
             pro.id = id;
             pro.ativo = ativo;
-            pro.categoria = valorSpinner;
+            pro.categoria = valorSpinner.toString();
             pro.descricao = descricao;
             pro.nome = produto;
             pro.valor = preco;
-            Conexao con = new Conexao(this);
 
             if (con.adicionaProduto(pro)) {
                 Toast.makeText(this, "ok", Toast.LENGTH_SHORT).show();
@@ -211,6 +206,10 @@ public class Edicao extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
+        con = new Conexao(this);
+        //limpa categoria nao utilizada
+        con.limpa();
+
         linear = (LinearLayout) findViewById(R.id.itens);
         popup = (LinearLayout) findViewById(R.id.popup);
 
@@ -231,22 +230,21 @@ public class Edicao extends AppCompatActivity {
         criaSpinner();
         id = getIntent().getIntExtra("id", 0);
 
+
+        String SUBTITULO;
         if (id == 0) {
-            setTitle("Adicionar produtos");
+            SUBTITULO = "Adicionar produtos";
         } else {
-            setTitle("Alterar produto");
+            SUBTITULO = "Alterar produto";
         }
+        String TITULO = new App().getNome();
+        getSupportActionBar().setTitle(TITULO);
+        getSupportActionBar().setSubtitle(SUBTITULO);
+
 
     }
 
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.edicao, menu);
-
-        return true;
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
